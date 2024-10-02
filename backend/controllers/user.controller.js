@@ -20,6 +20,7 @@ export const register = async (req, res) => {
             })
         }
         const hashedPassword = await bcrypt.hash(password, 10);
+
         await User.create({
             fullname,
             email,
@@ -79,7 +80,7 @@ export const login = async (req, res) => {
             role: user.role,
             profile: user.profile
         };
-        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpsOnly: true, sameSite: 'strict' }).jason({
+        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' }).json({
             message: `Welcome back ${user.fullname}`,
             success: true
         });
@@ -91,7 +92,7 @@ export const login = async (req, res) => {
 }
 export const logout = async (req, res) => {
     try {
-        return res.status(200).cookie("token", "", { maAge: 0 }).json({
+        return res.status(200).cookie("token", "", { maxAge: 0 }).json({
             message: "Logged out successfully.",
             sucess: true
         });
@@ -108,13 +109,13 @@ export const updateProfile = async (req, res) => {
         if (!fullname || !email || !phoneNumber || !bio || !skills) {
             return res.status(400).json({
                 message: "Something is missing",
-                successs: false
+                success: false
 
             });
         };
 
 
-        const skillsArray = skills.splits(",");
+        const skillsArray = skills.split(",");
         const userId = req.id; //middleware authentication 
         let user = await User.findById(userId);
 

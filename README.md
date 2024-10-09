@@ -1,1 +1,1 @@
-# Job Hunt Platform:
+# Job Hunt Platform
